@@ -59,7 +59,6 @@ proteo/
 - Mangueras y conectores apropiados
 
 ### Componentes Adicionales
-- **Módulo convertidor MAX3232** (RS232 a TTL)
 - **Módulo relé** (5V, 1 canal con optoacoplador)
 - Fuente de alimentación (USB-C o externa)
 - Protoboard o PCB para conexiones
@@ -98,7 +97,7 @@ pio device monitor
 ### 3. Conectar el hardware
 
 Seguir la [Guía de Conexión del Hardware](docs/CONEXION_HARDWARE.md) para conectar:
-- Sensor PreSens OXYBase-wr-RS232 (vía convertidor MAX3232)
+- Sensor PreSens OXYBase-wr-RS232 (**conexión directa TTL**, 5 cables)
 - Válvula solenoide TDF_330132 (vía módulo relé)
 
 ## Uso

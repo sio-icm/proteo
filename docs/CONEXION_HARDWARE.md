@@ -11,65 +11,64 @@ El sistema Proteo requiere conectar:
 
 ## 1. Conexión del Sensor PreSens OXYBase-wr-RS232
 
-### Problema: Incompatibilidad de voltajes
-- **Sensor PreSens**: Usa comunicación RS232 (voltajes ±12V)
-- **Arduino UNO R4**: Usa comunicación TTL (voltajes 0-5V)
-- **Solución**: Se requiere un **convertidor RS232 a TTL**
+### ✅ Buenas noticias: Conexión directa TTL
+- **Sensor PreSens**: El cable ya sale con señales TTL (0-5V)
+- **Arduino UNO R4**: Usa comunicación TTL (0-5V)
+- **Solución**: ✨ **Conexión directa, NO se necesita convertidor MAX3232**
 
 ### Hardware necesario
-- **Módulo convertidor MAX3232** (o similar: SP3232, ICL3232)
-  - Disponible en tiendas de electrónica
-  - Precio aproximado: 2-5€
-  - Incluye el chip MAX3232 y los capacitores necesarios
+- ✅ Cable del sensor PreSens OXYBase-wr-RS232 (5 cables)
+- ✅ Cables jumper hembra-macho (si es necesario)
+- ❌ ~~NO se necesita módulo MAX3232~~
 
 ### Esquema de conexión
 
 ```
 ┌─────────────────────┐
 │  PreSens OXYBase-wr │
-│     (RS232)         │
+│   (Cable 5 hilos)   │
+│      TTL 5V         │
 └──────────┬──────────┘
-           │ Cable RS232
-           │ (DB9 o similar)
            │
-     ┌─────▼─────────┐
-     │  MAX3232      │
-     │  Convertidor  │
-     │  RS232 → TTL  │
-     └─────┬─────────┘
+           │ Cable directo
+           │ (5 cables)
            │
     ┌──────▼─────────────┐
     │  Arduino UNO R4    │
     │      WiFi          │
+    │   (Serial1)        │
     └────────────────────┘
 ```
 
 ### Conexiones detalladas
 
-#### Del PreSens al MAX3232:
+#### Cable PreSens (5 hilos) al Arduino:
+
 ```
-PreSens RS232 → MAX3232
-TX (pin 3)    → RIN  (RS232 IN)
-RX (pin 2)    → ROUT (RS232 OUT)
-GND (pin 5)   → GND
+PreSens Cable      → Arduino UNO R4 WiFi
+─────────────────────────────────────────
+VCC (rojo, 5V)     → 5V
+GND (negro)        → GND
+TX (sensor)        → RX1 (pin 0 / Serial1 RX)
+RX (sensor)        → TX1 (pin 1 / Serial1 TX)
+Cable 5 (*)        → (verificar manual)
 ```
 
-#### Del MAX3232 al Arduino:
-```
-MAX3232   → Arduino UNO R4 WiFi
-TX (TTL)  → RX1 (pin 0 o Serial1 RX)
-RX (TTL)  → TX1 (pin 1 o Serial1 TX)
-VCC       → 5V
-GND       → GND
-```
+**(*) Nota sobre el 5º cable**: Puede ser:
+- Segundo GND (conectar a GND)
+- CTS/RTS (control de flujo, dejar sin conectar si no se usa)
+- Shield/malla (conectar a GND para protección)
+
+**Consultar el manual del sensor para el pinout exacto del cable.**
 
 ### Notas importantes:
-1. **NO conectar directamente** el sensor RS232 al Arduino sin convertidor (puede dañar ambos)
+1. ✅ **Conexión directa TTL** - El sensor ya tiene niveles 5V compatibles
 2. El Arduino UNO R4 WiFi tiene múltiples puertos seriales:
    - `Serial` (USB): Para comandos y debug
-   - `Serial1` (TX1/RX1): Para comunicación con sensor PreSens
-3. Alimentar el sensor PreSens con su fuente de 5V independiente
-4. Verificar el pinout exacto del conector RS232 del sensor (consultar manual)
+   - `Serial1` (TX1/RX1, pines 0 y 1): Para comunicación con sensor PreSens
+3. **Importante**: TX del sensor → RX del Arduino, RX del sensor → TX del Arduino
+4. Alimentar el sensor desde el Arduino (5V) o fuente externa de 5V
+5. El nombre "RS232" del sensor se refiere al protocolo de comunicación serial, pero las señales ya son TTL
 
 ---
 
@@ -138,7 +137,7 @@ GND                   → GND
 
 ```
                     ┌──────────────────────┐
-                    │  Fuente 12V          │
+                    │  Fuente alimentación │
                     │  (botella N₂ con     │
                     │   regulador presión) │
                     └──────────┬───────────┘
@@ -150,23 +149,21 @@ GND                   → GND
 │  OXYBase-wr    │                    │  (Solenoide N₂)        │
 │   (Sumergido)  │                    └──────────┬─────────────┘
 └───────┬────────┘                               │
-        │ RS232                           ┌──────▼──────┐
-        │                                 │   Relé      │
-   ┌────▼──────┐                         └──────┬──────┘
-   │ MAX3232   │                                │
-   │ Conversor │                                │
-   └────┬──────┘                                │
-        │ TTL                                   │
-        │                                       │
-     ┌──▼───────────────────────────────────────▼──┐
-     │                                              │
-     │        Arduino UNO R4 WiFi                   │
-     │                                              │
-     │  Serial1 (RX1/TX1) ← Sensor                 │
-     │  Pin 9              → Válvula (vía relé)    │
-     │  Pin 13             → LED status            │
-     │                                              │
-     └──────────────────┬───────────────────────────┘
+        │ Cable 5 hilos TTL            ┌─────────▼──────┐
+        │ (directo)                    │   Relé 5V      │
+        │                              └─────────┬──────┘
+        │                                        │
+        │                                        │
+     ┌──▼─────────────────────────────────────────▼──┐
+     │                                                │
+     │        Arduino UNO R4 WiFi                     │
+     │                                                │
+     │  5V, GND        → Sensor PreSens               │
+     │  Serial1 (TX1/RX1) ← Sensor (directo TTL)     │
+     │  Pin 9          → Válvula (vía relé)          │
+     │  Pin 13         → LED status                  │
+     │                                                │
+     └──────────────────┬─────────────────────────────┘
                         │
                    USB-C (PC)
 ```
@@ -181,7 +178,7 @@ GND                   → GND
 - [x] Válvula solenoide TDF_330132
 
 ### Componentes adicionales:
-- [ ] Módulo convertidor MAX3232 (RS232 a TTL)
+- [ ] ~~Módulo convertidor MAX3232~~ ❌ NO necesario (sensor ya es TTL)
 - [ ] Módulo relé 5V (1 canal, con optoacoplador)
 - [ ] Cables jumper macho-macho y macho-hembra
 - [ ] Diodo 1N4007 (flyback para válvula)
@@ -205,10 +202,15 @@ GND                   → GND
 2. Clonar el repositorio del proyecto
 3. Verificar que el Arduino se detecta en el sistema
 
-### Paso 2: Montar el convertidor RS232
-1. Conectar MAX3232 al Arduino (TX1, RX1, 5V, GND)
-2. Conectar cable RS232 al sensor PreSens
+### Paso 2: Conectar el sensor PreSens (TTL directo)
+1. Identificar los cables del sensor (VCC, GND, TX, RX)
+2. Conectar directamente al Arduino:
+   - VCC (rojo) → 5V
+   - GND (negro) → GND
+   - TX sensor → RX1 (pin 0)
+   - RX sensor → TX1 (pin 1)
 3. Verificar continuidad con multímetro
+4. **Importante**: Cruzar TX-RX correctamente
 
 ### Paso 3: Montar el control de válvula
 1. Conectar módulo relé al Arduino (pin 9, 5V, GND)

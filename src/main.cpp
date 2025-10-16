@@ -16,7 +16,8 @@
 // Válvula solenoide para nitrógeno
 const int VALVE_CONTROL = 9;        // Pin digital para control de válvula
 
-// Comunicación con sensor PreSens (RS232 via MAX3232)
+// Comunicación con sensor PreSens (TTL directo, 5V)
+// El sensor ya tiene señales TTL, NO necesita convertidor MAX3232
 // Usamos Serial1 para el sensor (pines TX1/RX1)
 // Serial0 (USB) queda libre para debug/comandos
 
@@ -50,12 +51,19 @@ const unsigned long SENSOR_READ_INTERVAL = 2000; // Leer sensor cada 2 segundos
 /**
  * Inicializa la comunicación con el sensor PreSens
  * El protocolo exacto depende del manual del fabricante
+ *
+ * CONEXIÓN DIRECTA TTL:
+ *   PreSens VCC → Arduino 5V
+ *   PreSens GND → Arduino GND
+ *   PreSens TX  → Arduino RX1 (pin 0)
+ *   PreSens RX  → Arduino TX1 (pin 1)
  */
 void initPreSensSensor() {
-  // Serial1 para comunicación con sensor PreSens vía MAX3232
+  // Serial1 para comunicación con sensor PreSens (TTL directo, 5V)
   Serial1.begin(9600); // Verificar baudrate en manual PreSens
 
   Serial.println("Inicializando sensor PreSens OXYBase-wr-RS232...");
+  Serial.println("Conexión: TTL directo (sin MAX3232)");
   delay(1000); // Esperar estabilización
 
   // TODO: Enviar comandos de inicialización según protocolo PreSens
