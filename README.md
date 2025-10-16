@@ -10,9 +10,17 @@ Proteo es un proyecto de hardware abierto que utiliza inyección de nitrógeno p
 
 ```
 proteo/
-├── arduino/           # Código fuente para Arduino
-├── schematics/        # Esquemáticos del circuito
+├── src/               # Código fuente (PlatformIO)
+│   └── main.cpp      # Programa principal
+├── lib/              # Librerías locales
+├── include/          # Headers
+├── test/             # Tests unitarios
+├── arduino/          # Código Arduino antiguo (deprecado)
+├── schematics/       # Esquemáticos del circuito
 ├── docs/             # Documentación adicional
+│   ├── INSTALACION_PLATFORMIO.md
+│   └── CONEXION_HARDWARE.md
+├── platformio.ini    # Configuración PlatformIO
 └── README.md         # Este archivo
 ```
 
@@ -51,17 +59,73 @@ proteo/
 - Mangueras y conectores apropiados
 
 ### Componentes Adicionales
+- **Módulo convertidor MAX3232** (RS232 a TTL)
+- **Módulo relé** (5V, 1 canal con optoacoplador)
 - Fuente de alimentación (USB-C o externa)
 - Protoboard o PCB para conexiones
-- Resistencias, transistores y otros componentes electrónicos (lista por completar)
+- Diodo flyback 1N4007
+- Cables jumper y conectores
+
+📖 **[Ver guía completa de conexión hardware](docs/CONEXION_HARDWARE.md)**
 
 ## Instalación
 
-(Instrucciones por añadir)
+### 1. Instalar PlatformIO
+
+Este proyecto usa PlatformIO en lugar del Arduino IDE tradicional.
+
+**Opción recomendada: VS Code + Extensión PlatformIO**
+
+1. Instalar [VS Code](https://code.visualstudio.com/)
+2. Instalar extensión "PlatformIO IDE"
+3. Abrir este proyecto en VS Code
+
+📖 **[Guía detallada de instalación de PlatformIO](docs/INSTALACION_PLATFORMIO.md)**
+
+### 2. Compilar y cargar
+
+```bash
+# Compilar
+pio run
+
+# Cargar al Arduino UNO R4 WiFi
+pio run --target upload
+
+# Abrir monitor serial
+pio device monitor
+```
+
+### 3. Conectar el hardware
+
+Seguir la [Guía de Conexión del Hardware](docs/CONEXION_HARDWARE.md) para conectar:
+- Sensor PreSens OXYBase-wr-RS232 (vía convertidor MAX3232)
+- Válvula solenoide TDF_330132 (vía módulo relé)
 
 ## Uso
 
-(Instrucciones por añadir)
+### Comandos disponibles
+
+Una vez cargado el programa y abierto el monitor serial (9600 baud):
+
+```
+HELP         - Muestra todos los comandos disponibles
+START        - Inicia el sistema de control automático
+STOP         - Detiene el sistema
+STATUS       - Muestra el estado actual del sistema
+VALVE OPEN   - Abre la válvula de N₂ manualmente
+VALVE CLOSE  - Cierra la válvula de N₂ manualmente
+READ         - Solicita una lectura del sensor PreSens
+```
+
+### Modo automático
+
+El sistema controla automáticamente el nivel de oxígeno:
+1. Lee el sensor PreSens cada 2 segundos
+2. Si O₂ > objetivo: abre válvula (inyecta N₂)
+3. Si O₂ ≤ objetivo: cierra válvula
+4. Monitorea temperatura y condiciones de seguridad
+
+**Nota**: El objetivo de O₂ por defecto es 0.5 mg/L (condiciones casi anóxicas)
 
 ## Licencia
 
