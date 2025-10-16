@@ -1,10 +1,10 @@
 # Proteo
 
-Sistema de extracción de oxígeno del agua salada para peceras mediante electrólisis, controlado por Arduino.
+Sistema de desoxigenación de agua mediante inyección controlada de nitrógeno para peceras, controlado por Arduino.
 
 ## Descripción
 
-Proteo es un proyecto de hardware abierto que utiliza electrólisis para extraer oxígeno del agua salada de peceras. El sistema está controlado por un Arduino y diseñado para ser eficiente y seguro.
+Proteo es un proyecto de hardware abierto que utiliza inyección de nitrógeno para desplazar el oxígeno del agua en peceras. El sistema está controlado por un Arduino que monitoriza el nivel de oxígeno mediante un sensor y controla una válvula que regula el paso de nitrógeno. Al inyectar nitrógeno, este desplaza el oxígeno disuelto en el agua, permitiendo crear condiciones anóxicas controladas. El sistema está diseñado para ser eficiente, seguro y preciso.
 
 ## Estructura del proyecto
 
@@ -19,8 +19,11 @@ proteo/
 ## Hardware requerido
 
 - Arduino (modelo por definir)
+- Sensor de oxígeno disuelto
+- Válvula solenoide para control de gas
+- Fuente de nitrógeno (botella de gas comprimido)
+- Regulador de presión
 - Componentes electrónicos (lista por completar)
-- Electrodos para electrólisis
 - Fuente de alimentación
 
 ## Instalación
