@@ -23,7 +23,7 @@ proteo/
   - LED de estado (pin 13)
 
 ### Pendiente ⏳
-- Definir hardware específico (modelo Arduino, sensor de O₂ disuelto exacto, válvula)
+- Definir hardware específico (sensor de O₂ disuelto exacto, válvula solenoide)
 - Crear esquemáticos del circuito en /schematics
 - Implementar control PID para regulación de oxígeno objetivo
 - Calibrar sensores de oxígeno disuelto y temperatura
@@ -36,7 +36,12 @@ proteo/
 ## Decisiones de Diseño
 
 ### Hardware
-- Arduino con salidas digitales para control de válvula solenoide
+- **Arduino UNO R4 WiFi** como controlador principal
+  - Procesador: Renesas RA4M1 (ARM Cortex-M4, 48 MHz)
+  - Memoria: 32 kB SRAM, 256 kB Flash, 8 kB EEPROM
+  - WiFi/Bluetooth integrado (ESP32-S3) para monitoreo remoto
+  - 14 pines digitales, 6 entradas analógicas
+  - Voltaje de operación: 5V
 - Sensor de oxígeno disuelto (analógico) para monitorización continua
 - Sensor de temperatura para control de condiciones
 - Válvula solenoide para regulación de flujo de nitrógeno
@@ -69,8 +74,8 @@ proteo/
 - Organización: SIO-ICM (https://github.com/sio-icm)
 
 ## Próximas Tareas Sugeridas
-1. Especificar hardware concreto a utilizar (sensor O₂, válvula solenoide)
-2. Diseñar esquemático del circuito completo
+1. Especificar sensores exactos (sensor O₂ disuelto, válvula solenoide, sensor temperatura)
+2. Diseñar esquemático del circuito completo para Arduino UNO R4 WiFi
 3. Implementar control PID para mantener nivel de O₂ objetivo
 4. Calibrar y probar sensores de oxígeno disuelto y temperatura
 5. Crear documentación de construcción paso a paso
