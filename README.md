@@ -41,7 +41,9 @@ proteo/
   - Resistencia a presión: hasta 3 bar
   - Calibración: dos puntos (ambiente libre de O₂ y aire saturado)
   - [Especificaciones completas](https://www.presens.de/products/detail/oxybase-wr-rs232)
-- Válvula solenoide para control de gas nitrógeno (por definir)
+- **Válvula solenoide: TDF_330132**
+  - Para control de flujo de gas nitrógeno
+  - (Especificaciones por completar)
 
 ### Sistema de Gas
 - Fuente de nitrógeno (botella de gas comprimido)

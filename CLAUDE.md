@@ -24,7 +24,7 @@ proteo/
 
 ### Pendiente ⏳
 - Integrar comunicación RS232 con sensor PreSens OXYBase-wr-RS232
-- Definir válvula solenoide específica para nitrógeno
+- Obtener especificaciones completas de válvula TDF_330132
 - Crear esquemáticos del circuito en /schematics
 - Implementar control PID para regulación de oxígeno objetivo
 - Calibrar sensor PreSens (dos puntos: ambiente libre O₂ y aire saturado)
@@ -50,7 +50,8 @@ proteo/
   - Sensor de temperatura integrado (NTC, ±1°C)
   - Diseño sumergible, resistencia hasta 3 bar
   - Alimentación: 5V, 1W máx.
-- Válvula solenoide para regulación de flujo de nitrógeno
+- **Válvula solenoide TDF_330132** para regulación de flujo de nitrógeno
+  - (Especificaciones pendientes de documentar)
 - Prioridad en seguridad: cierre automático de válvula ante condiciones anormales
 
 ### Software
@@ -83,7 +84,7 @@ proteo/
 
 ## Próximas Tareas Sugeridas
 1. Implementar comunicación RS232 con sensor PreSens OXYBase-wr-RS232
-2. Especificar válvula solenoide para nitrógeno
+2. Obtener y documentar especificaciones de válvula TDF_330132
 3. Diseñar esquemático del circuito completo para Arduino UNO R4 WiFi
 4. Implementar control PID para mantener nivel de O₂ objetivo
 5. Calibrar sensor PreSens (dos puntos: ambiente libre O₂ y aire saturado)
