@@ -17,16 +17,17 @@ proteo/
 ### Implementado ✅
 - Código Arduino básico con:
   - Control de válvula solenoide para nitrógeno (pines 9 y 10)
-  - Lectura de sensor de oxígeno disuelto (A0) y temperatura (A1)
+  - Lectura de sensor de oxígeno disuelto vía RS232 (placeholder en A0)
   - Sistema de seguridad por temperatura máxima (60°C)
   - Comandos seriales: START, STOP, STATUS
   - LED de estado (pin 13)
 
 ### Pendiente ⏳
-- Definir hardware específico (sensor de O₂ disuelto exacto, válvula solenoide)
+- Integrar comunicación RS232 con sensor PreSens OXYBase-wr-RS232
+- Definir válvula solenoide específica para nitrógeno
 - Crear esquemáticos del circuito en /schematics
 - Implementar control PID para regulación de oxígeno objetivo
-- Calibrar sensores de oxígeno disuelto y temperatura
+- Calibrar sensor PreSens (dos puntos: ambiente libre O₂ y aire saturado)
 - Añadir sistema de seguridad para control de flujo de nitrógeno
 - Añadir documentación técnica completa
 - Definir licencia del proyecto
@@ -42,16 +43,22 @@ proteo/
   - WiFi/Bluetooth integrado (ESP32-S3) para monitoreo remoto
   - 14 pines digitales, 6 entradas analógicas
   - Voltaje de operación: 5V
-- Sensor de oxígeno disuelto (analógico) para monitorización continua
-- Sensor de temperatura para control de condiciones
+- **Sensor PreSens OXYBase-wr-RS232** para oxígeno disuelto
+  - Sensor óptico con comunicación RS232 (protocolo propietario)
+  - Rango: 0-50% O₂ (0-22.5 mg/L disuelto), precisión ±0.2%
+  - Tiempo de respuesta: ~30 segundos
+  - Sensor de temperatura integrado (NTC, ±1°C)
+  - Diseño sumergible, resistencia hasta 3 bar
+  - Alimentación: 5V, 1W máx.
 - Válvula solenoide para regulación de flujo de nitrógeno
 - Prioridad en seguridad: cierre automático de válvula ante condiciones anormales
 
 ### Software
 - Arquitectura modular para fácil expansión
-- Control por puerto serial (9600 baud)
+- Control por puerto serial (9600 baud) para interfaz usuario
+- Comunicación RS232 con sensor PreSens (protocolo propietario)
 - Sistema de comandos simple y extensible
-- Placeholders para sensores (pendiente calibración real)
+- Pendiente: implementar parser de protocolo PreSens para lecturas reales
 
 ### Seguridad
 - Temperatura máxima: 60°C
@@ -67,23 +74,26 @@ proteo/
 
 ## Notas Importantes
 - El proyecto está en fase inicial/prototipo
-- Lecturas de sensores son placeholders (conversión básica)
+- Sensor PreSens usa RS232 con protocolo propietario (requiere implementación)
 - Control de válvula es básico, requiere implementar PID
 - Sistema pensado para uso en acuarios/peceras para experimentos de hipoxia/anoxia
 - Requiere suministro de nitrógeno (botella de gas comprimido)
+- Sensor PreSens incluye temperatura integrada (elimina necesidad de sensor adicional)
 - Organización: SIO-ICM (https://github.com/sio-icm)
 
 ## Próximas Tareas Sugeridas
-1. Especificar sensores exactos (sensor O₂ disuelto, válvula solenoide, sensor temperatura)
-2. Diseñar esquemático del circuito completo para Arduino UNO R4 WiFi
-3. Implementar control PID para mantener nivel de O₂ objetivo
-4. Calibrar y probar sensores de oxígeno disuelto y temperatura
+1. Implementar comunicación RS232 con sensor PreSens OXYBase-wr-RS232
+2. Especificar válvula solenoide para nitrógeno
+3. Diseñar esquemático del circuito completo para Arduino UNO R4 WiFi
+4. Implementar control PID para mantener nivel de O₂ objetivo
+5. Calibrar sensor PreSens (dos puntos: ambiente libre O₂ y aire saturado)
 5. Crear documentación de construcción paso a paso
 6. Implementar medidas de seguridad para manejo de gas nitrógeno
 
 ## Referencias Técnicas
 - Desoxigenación por desplazamiento: N₂ desplaza O₂ disuelto en agua
-- Sensores de oxígeno disuelto: principios de medición
+- Sensor PreSens OXYBase-wr: medición óptica de O₂ disuelto (PSt3)
+- Protocolo RS232 propietario PreSens (requiere documentación del fabricante)
 - Control de válvulas solenoides con Arduino
 - Seguridad en el manejo de gases inertes (nitrógeno)
 

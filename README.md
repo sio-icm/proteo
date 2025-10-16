@@ -28,9 +28,20 @@ proteo/
   - [Documentación oficial](https://docs.arduino.cc/hardware/uno-r4-wifi/)
 
 ### Sensores y Actuadores
-- Sensor de oxígeno disuelto (por definir modelo específico)
+- **Sensor de oxígeno disuelto: PreSens OXYBase-wr-RS232**
+  - Principio de medición: Sensor óptico (PSt3)
+  - Rango de medición: 0-50% O₂ (0-22.5 mg/L disuelto)
+  - Precisión: ±0.2% a 20.9% O₂
+  - Límite de detección: 0.03% O₂ (0.020 mg/L disuelto)
+  - Tiempo de respuesta: ~30 segundos para O₂ disuelto
+  - Interfaz: RS232 (protocolo propietario PreSens)
+  - Alimentación: 5V, consumo máx. 1W
+  - Sensor de temperatura integrado (NTC, ±1°C)
+  - Diseño sumergible, carcasa acero inoxidable SUS 316L
+  - Resistencia a presión: hasta 3 bar
+  - Calibración: dos puntos (ambiente libre de O₂ y aire saturado)
+  - [Especificaciones completas](https://www.presens.de/products/detail/oxybase-wr-rs232)
 - Válvula solenoide para control de gas nitrógeno (por definir)
-- Sensor de temperatura (por definir)
 
 ### Sistema de Gas
 - Fuente de nitrógeno (botella de gas comprimido)
