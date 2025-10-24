@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRESENS Monitor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>PRESENS O₂ Monitor</h1>
+            <div class="status-indicator">
+                <span class="status-dot" id="statusDot"></span>
+                <span id="statusText">Disconnected</span>
+            </div>
+        </header>
+
+        <div class="controls">
+            <button id="startBtn" class="btn btn-start">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+                Start
+            </button>
+            <button id="stopBtn" class="btn btn-stop" disabled>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <rect x="6" y="4" width="4" height="16"></rect>
+                    <rect x="14" y="4" width="4" height="16"></rect>
+                </svg>
+                Stop
+            </button>
+            <button id="singleBtn" class="btn btn-single">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+                One Measurement
+            </button>
+        </div>
+
+        <div class="metrics">
+            <div class="metric-card oxygen">
+                <h3>Oxygen</h3>
+                <div class="metric-value">
+                    <span id="oxygenValue">--</span>
+                    <span class="unit">%</span>
+                </div>
+                <div class="metric-bar">
+                    <div class="bar-fill" id="oxygenBar"></div>
+                </div>
+            </div>
+
+            <div class="metric-card temperature">
+                <h3>Temperature</h3>
+                <div class="metric-value">
+                    <span id="temperatureValue">--</span>
+                    <span class="unit">°C</span>
+                </div>
+                <div class="metric-bar">
+                    <div class="bar-fill" id="temperatureBar"></div>
+                </div>
+            </div>
+
+            <div class="metric-card phase">
+                <h3>Phase</h3>
+                <div class="metric-value">
+                    <span id="phaseValue">--</span>
+                    <span class="unit">°</span>
+                </div>
+            </div>
+
+            <div class="metric-card amplitude">
+                <h3>Amplitude</h3>
+                <div class="metric-value">
+                    <span id="amplitudeValue">--</span>
+                    <span class="unit"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="history">
+            <div class="history-header">
+                <h3>History</h3>
+                <div class="history-buttons">
+                    <button id="downloadBtn" class="btn-download">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="7 10 12 15 17 10"></polyline>
+                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                        </svg>
+                        CSV
+                    </button>
+                    <button id="clearBtn" class="btn-clear">Clear</button>
+                </div>
+            </div>
+            <div id="historyContainer" class="history-list"></div>
+        </div>
+
+        <div class="last-update">
+            Last update: <span id="lastUpdate">Never</span>
+        </div>
+    </div>
+
+    <div id="csvModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Select CSV file</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div id="csvList" class="csv-list"></div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
