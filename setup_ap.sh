@@ -24,11 +24,6 @@ wmm_enabled=0
 macaddr_acl=0
 auth_algs=1
 ignore_broadcast_ssid=0
-wpa=2
-wpa_passphrase=presens123
-wpa_key_mgmt=WPA-PSK
-wpa_pairwise=TKIP
-rsn_pairwise=CCMP
 EOF
 
 echo "🌐 Configuring dnsmasq..."
@@ -40,6 +35,15 @@ address=/presens.local/192.168.4.1
 address=/monitor.local/192.168.4.1
 address=/sensor.local/192.168.4.1
 EOF
+
+echo "🔧 Disabling wpa_supplicant for wlan0..."
+# Desactivar wpa_supplicant para evitar conexiones automáticas a redes guardadas
+systemctl disable wpa_supplicant.service
+# Renombrar el archivo de redes guardadas para que no se conecte automáticamente
+if [ -f /etc/wpa_supplicant/wpa_supplicant.conf ]; then
+    mv /etc/wpa_supplicant/wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.conf.backup
+    echo "✓ Redes WiFi guardadas desactivadas (backup guardado)"
+fi
 
 echo "🔧 Configuring static IP..."
 cat >> /etc/dhcpcd.conf << 'EOF'
@@ -89,10 +93,9 @@ echo "✅ Setup completed!"
 echo ""
 echo "📋 Next steps:"
 echo "1. sudo reboot"
-echo "2. After reboot, WiFi network 'PRESENS-Monitor' will be available"
-echo "3. Password: presens123"
-echo "4. Connect and go to: http://presens.local or any website"
-echo "5. The sensor app will load automatically!"
+echo "2. After reboot, WiFi network 'PRESENS-Monitor' will be available (OPEN - no password)"
+echo "3. Connect and go to: http://presens.local or any website"
+echo "4. The sensor app will load automatically!"
 echo ""
 echo "🔧 Troubleshooting:"
 echo "- Check services: sudo systemctl status hostapd dnsmasq presens-monitor"
