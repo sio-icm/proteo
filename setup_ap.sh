@@ -27,13 +27,22 @@ ignore_broadcast_ssid=0
 EOF
 
 echo "🌐 Configuring dnsmasq..."
-cp /etc/dnsmasq.conf /etc/dnsmasq.conf.backup
+cp /etc/dnsmasq.conf /etc/dnsmasq.conf.backup 2>/dev/null || true
 cat > /etc/dnsmasq.conf << 'EOF'
 interface=wlan0
 dhcp-range=192.168.4.2,192.168.4.20,255.255.255.0,24h
 address=/presens.local/192.168.4.1
 address=/monitor.local/192.168.4.1
 address=/sensor.local/192.168.4.1
+bind-interfaces
+EOF
+
+echo "🔧 Configuring dnsmasq service dependencies..."
+mkdir -p /etc/systemd/system/dnsmasq.service.d
+cat > /etc/systemd/system/dnsmasq.service.d/wait-for-network.conf << 'EOF'
+[Unit]
+After=dhcpcd.service
+Wants=dhcpcd.service
 EOF
 
 echo "🔧 Disabling wpa_supplicant for wlan0..."
@@ -46,6 +55,9 @@ if [ -f /etc/wpa_supplicant/wpa_supplicant.conf ]; then
 fi
 
 echo "🔧 Configuring static IP..."
+# Eliminar configuración previa si existe para evitar duplicados
+sed -i '/# PRESENS Monitor Access Point/,/nohook wpa_supplicant/d' /etc/dhcpcd.conf
+# Añadir configuración
 cat >> /etc/dhcpcd.conf << 'EOF'
 
 # PRESENS Monitor Access Point
@@ -60,9 +72,16 @@ iptables -t nat -A PREROUTING -i wlan0 -p tcp --dport 443 -j REDIRECT --to-port 
 iptables-save > /etc/iptables/rules.v4
 
 echo "🔄 Enabling services..."
+systemctl daemon-reload
 systemctl unmask hostapd
 systemctl enable hostapd
 systemctl enable dnsmasq
+
+echo "🔄 Restarting services in correct order..."
+systemctl restart dhcpcd
+sleep 2
+systemctl restart hostapd
+systemctl restart dnsmasq
 
 echo "📱 Creating PRESENS app service..."
 cat > /etc/systemd/system/presens-monitor.service << 'EOF'
